@@ -1,0 +1,61 @@
+//degress to radians used to rotate
+
+const degToRad = (deg) => deg*Math.PI/180;
+
+//change color 
+
+context.fillStyle = 'white';
+
+//fill rectangle
+
+context.fillRect(0, 0, width, height);
+
+//add a image 
+
+const img = new Image();
+img.src = '/ig.svg';
+context.drawImage(img);
+
+//centered rectangle
+
+context.fillStyle = 'black';
+const x = width * 0.5;
+const y = height * 0.5;
+const w = width * 0.3;
+const h = height * 0.3;
+    
+context.save();
+context.translate(x,y);
+context.fillRect(-w*0.5,-h*0.5,w,h);
+context.restore();
+
+//rectangles clock
+
+context.fillStyle = 'white';
+context.fillRect(0, 0, width, height);
+context.fillStyle = 'black';
+
+const cx = width * 0.5;
+const cy = height * 0.5;
+const w = width * 0.01;
+const h = height * 0.1;
+
+const num = 12;
+
+const radius = width * 0.3;
+
+for(let i=0; i< num; i++){
+    const slice = degToRad(360)/num;
+    const angle = slice * i;
+    
+    x = cx + radius * Math.sin(angle);
+    y = cy + radius * Math.cos(angle);
+
+    context.save();
+    context.translate(x,y);
+    context.rotate(-angle);
+    context.fillRect(-w*0.5,-h*0.5,w,h);
+    context.restore();
+}
+
+//
