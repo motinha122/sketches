@@ -3,29 +3,47 @@ const math = require('canvas-sketch-util/math');
 const random = require('canvas-sketch-util/random');
 
 const settings = {
-  dimensions: [2048, 2048],
-  animate: true
+  dimensions: [2048, 2048]
 };
 
-const sketch = ({ context, width, height }) => {
-  const agents = [];
-  
-  for (let i = 0; i < 40; i++) {
-    const x = random.range(0, width);
-    const y = random.range(0, height);
-    agents.push(new Agent(x, y));
-  }
-  
-  return ({ context, width, height }) => {
 
+const sketch = () => {
+  return ({ context, width, height }) => {
+    
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
+    
+    const agents = [];
 
-    agents.forEach(agent => {
-      agent.update();
-      agent.draw(context);
-    });
+    for (let i = 0; i < 40; i++) {
+      const x = random.range(0, width);
+      const y = random.range(0, height);
+      agents.push(new Agent(x, y));
+    }
+    
+    let fpsInterval, now, then, elapsed;
 
+    function startAnimation(fps) {
+      fpsInterval = 1000 / fps;
+      then = Date.now();
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      now = Date.now();
+      elapsed = now - then;
+      if (elapsed > fpsInterval) {
+        context.clearRect(0,0,width,height);
+        agents.forEach(agent => {
+          agent.update();
+          agent.draw(context);
+        });
+      }
+    }
+
+    startAnimation(60);
+    
   };
 };
 
