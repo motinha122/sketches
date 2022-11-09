@@ -20,7 +20,7 @@ class Vector {
 class Circle {
     constructor(x,y){
         this.pos = new Vector(x,y);
-        this.vel = new Vector(u.random(-1,1),u.random(-1,1));
+        this.vel = new Vector(u.random(-0.5,0.5),u.random(-0.5,0.5));
         this.radius = u.random(3,12);
     }
 
@@ -31,6 +31,7 @@ class Circle {
         ctx.translate(this.pos.x,this.pos.y);
         ctx.beginPath();
         ctx.arc(0,0,this.radius,0,Math.PI * 2);
+        ctx.fill();
         ctx.stroke();
         ctx.restore();
     }
@@ -51,16 +52,30 @@ class Circle {
 }
 
 const circles = [];
+const circlesNum = 40;
 
-for(let i=0; i<40; i++){
+for(let i=0; i<circlesNum; i++){
     const x = u.random(0,canvas.width);
     const y = u.random(0,canvas.height);
     circles.push(new Circle(x,y));
 }
 
-function draw(){
+function draw(){    
     ctx.fillStyle = 'white';
     ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    for(let i=0; i<circles.length; i++){
+        const circle = circles[i];
+
+        for(let j=i+1; j<circles.length; j++){
+            const other = circles[j];
+
+            ctx.beginPath();
+            ctx.moveTo(circle.pos.x,circle.pos.y);
+            ctx.lineTo(other.pos.x,other.pos.y);
+            ctx.stroke();
+        }
+    }
     
     circles.forEach(circle =>{
         circle.update();
